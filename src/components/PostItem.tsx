@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Link } from 'gatsby'
-
+import { IPostFrontmatter } from 'types/PostItem.interface'
+import { GatsbyImage } from 'gatsby-plugin-image'
 const PostItemFrame = styled(Link)`
   display: flex;
   flex-direction: column;
@@ -14,11 +15,10 @@ const PostItemFrame = styled(Link)`
   }
 `
 
-const ThumbnailImage = styled.img`
+const ThumbnailImage = styled(GatsbyImage)`
   width: 100%;
   height: 200px;
   border-radius: 10px;
-  object-fit: contain;
 `
 
 const PostItemContent = styled.div`
@@ -71,12 +71,7 @@ const PostSummary = styled.div`
   background-color: blue;
 `
 
-interface IPostItem {
-  title: string
-  date: string
-  categories: string[]
-  summary: string
-  thumbnail: string
+interface IPostItem extends IPostFrontmatter {
   link: string
 }
 
@@ -85,12 +80,14 @@ function PostItem({
   date,
   categories,
   summary,
-  thumbnail,
+  thumbnail: {
+    childImageSharp: { gatsbyImageData },
+  },
   link,
 }: IPostItem) {
   return (
     <PostItemFrame to={link}>
-      <ThumbnailImage src={thumbnail} alt="PostItem Image" />
+      <ThumbnailImage image={gatsbyImageData} alt="PostItem Image" />
       <PostItemContent>
         <PostTitle>{title}</PostTitle>
         <PostDate>{date}</PostDate>

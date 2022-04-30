@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 
-interface ICategoryList {
+export interface ICategoryList {
   selectedCategory: string
   categoryList: {
     [key: string]: number

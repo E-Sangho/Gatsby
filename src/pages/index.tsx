@@ -1,29 +1,104 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 import GlobalStyle from 'components/GlobalStyle'
 import CategoryList from 'components/CategoryList'
 import GridPostList from 'components/PostList'
+import { graphql, Link } from 'gatsby'
+import { IPostListItem } from 'types/PostItem.interface'
+import queryString, { ParsedQuery } from 'query-string'
+import { ICategoryList } from 'components/CategoryList'
 
-const Container = styled.div``
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`
 
-const CATEGORY_LIST = {
-  All: 5,
-  Web: 3,
-  Mobile: 2,
+interface IGetPostList {
+  location: {
+    search: string
+  }
+  data: {
+    allMarkdownRemark: {
+      edges: IPostListItem[]
+    }
+  }
 }
 
-function IndexPage() {
+function IndexPage({
+  location: { search },
+  data: {
+    allMarkdownRemark: { edges },
+  },
+}: IGetPostList) {
+  const parsed = queryString.parse(search)
+  const selectedCategory =
+    typeof parsed.category !== 'string' || !parsed.category
+      ? 'All'
+      : parsed.category
+  const categoryList = useMemo(
+    () =>
+      edges.reduce(
+        (
+          list: ICategoryList['categoryList'],
+          {
+            node: {
+              frontmatter: { categories },
+            },
+          }: IPostListItem,
+        ) => {
+          categories.forEach(category => {
+            if (list[category] === undefined) list[category] = 1
+            else list[category]++
+          })
+
+          list['All']++
+
+          return list
+        },
+        { All: 0 },
+      ),
+    [],
+  )
   return (
     <Container>
       <GlobalStyle />
       <Header />
-      <CategoryList selectedCategory="Web" categoryList={CATEGORY_LIST} />
-      <GridPostList />
+      <CategoryList
+        selectedCategory={selectedCategory}
+        categoryList={categoryList}
+      />
+      <GridPostList selectedCategory={selectedCategory} posts={edges} />
       <Footer />
     </Container>
   )
 }
 
 export default IndexPage
+
+export const getPostList = graphql`
+  query getPostList {
+    allMarkdownRemark(
+      sort: { order: DESC, fields: [frontmatter___date, frontmatter___title] }
+    ) {
+      edges {
+        node {
+          id
+          frontmatter {
+            title
+            summary
+            date(formatString: "YYYY.MM.DD.")
+            categories
+            thumbnail {
+              childImageSharp {
+                gatsbyImageData(width: 768, height: 400)
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
