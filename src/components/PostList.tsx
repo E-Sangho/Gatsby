@@ -1,8 +1,7 @@
-import { useMemo } from 'react'
 import styled from 'styled-components'
 import PostItem from './PostItem'
 import { IPostListItem } from 'types/PostItem.interface'
-
+import useInfiniteScroll, { IuseInfiniteScroll } from 'hooks/useInfiniteScroll'
 const GridPostFrame = styled.div`
   display: grid;
   grid-template-columns: repeat(3, minmax(auto, 400px));
@@ -16,25 +15,23 @@ interface IPostList {
 }
 
 function GridPostList({ selectedCategory, posts }: IPostList) {
-  const postListData = useMemo(
-    () =>
-      posts.filter(
-        ({
-          node: {
-            frontmatter: { categories },
-          },
-        }: IPostListItem) =>
-          selectedCategory !== 'All'
-            ? categories.includes(selectedCategory)
-            : true,
-      ),
-    [selectedCategory],
+  const { containerRef, postList }: IuseInfiniteScroll = useInfiniteScroll(
+    selectedCategory,
+    posts,
   )
   return (
-    <GridPostFrame>
-      {postListData.map(({ node: { id, frontmatter } }: IPostListItem) => (
-        <PostItem {...frontmatter} link="https://www.google.co.kr" key={id} />
-      ))}
+    <GridPostFrame ref={containerRef}>
+      {postList.map(
+        ({
+          node: {
+            id,
+            fields: { slug },
+            frontmatter,
+          },
+        }: IPostListItem) => (
+          <PostItem {...frontmatter} link={slug} key={id} />
+        ),
+      )}
     </GridPostFrame>
   )
 }

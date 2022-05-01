@@ -14,6 +14,9 @@ export interface IPostFrontmatter {
 export interface IPostListItem {
   node: {
     id: string
+    fields: {
+      slug: string
+    }
     frontmatter: IPostFrontmatter
   }
 }

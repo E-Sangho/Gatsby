@@ -86,10 +86,13 @@ export const getPostList = graphql`
       edges {
         node {
           id
+          fields {
+            slug
+          }
           frontmatter {
             title
             summary
-            date(formatString: "YYYY.MM.DD.")
+            date(formatString: "YYYY-MM-DD HH::mm:ss")
             categories
             thumbnail {
               childImageSharp {
