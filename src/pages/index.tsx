@@ -1,14 +1,12 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import Header from 'components/Header'
-import Footer from 'components/Footer'
-import GlobalStyle from 'components/GlobalStyle'
 import CategoryList from 'components/CategoryList'
 import GridPostList from 'components/PostList'
 import { graphql, Link } from 'gatsby'
 import { IPostListItem } from 'types/PostItem.interface'
 import queryString, { ParsedQuery } from 'query-string'
 import { ICategoryList } from 'components/CategoryList'
+import BasicLayout from '../layout/basic'
 
 const Container = styled.div`
   display: flex;
@@ -63,16 +61,13 @@ function IndexPage({
     [],
   )
   return (
-    <Container>
-      <GlobalStyle />
-      <Header />
+    <BasicLayout>
       <CategoryList
         selectedCategory={selectedCategory}
         categoryList={categoryList}
       />
       <GridPostList selectedCategory={selectedCategory} posts={edges} />
-      <Footer />
-    </Container>
+    </BasicLayout>
   )
 }
 

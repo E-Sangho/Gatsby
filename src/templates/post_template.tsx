@@ -1,10 +1,41 @@
-interface IPostTemplate {}
 import { graphql } from 'gatsby'
+import BasicLayout from '../layout/basic'
+import PostHeader from 'components/PostHeader'
+import { IPostFrontmatter } from '../types/PostItem.interface'
+import PostContent from 'components/PostContent'
 
-function PostTemplate(props: IPostTemplate) {
-  console.log(props)
+interface IPostPageItem {
+  node: {
+    html: string
+    frontmatter: IPostFrontmatter
+  }
+}
 
-  return <div>Post Template</div>
+interface IPostTemplate {
+  data: {
+    allMarkdownRemark: {
+      edges: IPostPageItem[]
+    }
+  }
+}
+
+function PostTemplate({
+  data: {
+    allMarkdownRemark: { edges },
+  },
+}: IPostTemplate) {
+  const {
+    node: {
+      html,
+      frontmatter: { title, date, categories },
+    },
+  } = edges[0]
+  return (
+    <BasicLayout>
+      <PostHeader title={title} date={date} categories={categories} />
+      <PostContent html={html} />
+    </BasicLayout>
+  )
 }
 
 export default PostTemplate
