@@ -9,29 +9,28 @@ const HeaderFrame = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 64px;
+  height: 128px;
   background-color: red;
 `
 
 const HeaderStart = styled.div`
   width: 33%;
   height: 100%;
-  padding-left: 40px;
+  padding-left: 64px;
   display: flex;
   align-items: center;
 `
 
 const HeaderLogo = styled.div`
   font-weight: 800;
-  font-size: 20px;
-  color: white;
 `
 const HeaderMiddle = styled.div`
-  width: 33%;
+  width: 34%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 18px;
 `
 
 const HeaderNavigation = styled.div`
@@ -57,12 +56,12 @@ const HeaderEnd = styled.div`
   display: flex;
   justify-content: end;
   align-items: center;
-  padding-right: 40px;
+  padding-right: 64px;
 `
 
 const HeaderIcon = styled.div`
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   fill: white;
   margin: 0 8px;
 `
@@ -89,6 +88,7 @@ function Header() {
       <HeaderMiddle>
         <HeaderNavigation>
           <Link to="/">Home</Link>
+          <Link to="/about">About</Link>
           <Link to="posts">Posts</Link>
           <Link to="portfolio">Portfolio</Link>
         </HeaderNavigation>

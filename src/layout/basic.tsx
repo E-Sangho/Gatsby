@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import GlobalStyle from 'components/GlobalStyle'
-import Header from 'components/Header'
-import Footer from 'components/Footer'
+import { ThemeProvider } from 'styled-components'
+import { theme } from '../theme/themes'
 
 const Container = styled.div`
   display: flex;
@@ -15,12 +15,12 @@ interface IBasicLayout {
 
 function BasicLayout({ children }: IBasicLayout) {
   return (
-    <Container>
-      <GlobalStyle />
-      <Header />
-      {children}
-      <Footer />
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container>
+        <GlobalStyle />
+        {children}
+      </Container>
+    </ThemeProvider>
   )
 }
 
